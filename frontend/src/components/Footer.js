@@ -93,8 +93,9 @@ export default function Footer() {
               Waves Enterprise
             </h6>
             <p>
-              Here you can use rows and columns to organize your footer content.
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Easily manage orders, users, and products. Access real-time data
+              and streamline your workflow to keep your business running
+              smoothly. All the tools you need, just a click away.
             </p>
           </div>
           {/* <!-- Products section --> */}
