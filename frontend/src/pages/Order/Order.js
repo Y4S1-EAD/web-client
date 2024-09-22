@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 import CreateOrder from './CreateOrder'; // Import the CreateOrder component
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

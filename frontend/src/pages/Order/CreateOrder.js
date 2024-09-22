@@ -42,32 +42,54 @@ export default function CreateOrder() {
               </div>
               <div className="modal-body p-4">
                 <form>
-                  {/* Name input */}
+                  {/* Order Description input */}
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="name">
-                      Name
+                    <label className="form-label" htmlFor="orderDescription">
+                      Order Description
                     </label>
-                    <input type="text" id="name" className="form-control" />
+                    <input
+                      type="text"
+                      id="orderDescription"
+                      className="form-control"
+                      placeholder="Enter order description"
+                    />
                   </div>
 
-                  {/* Email input */}
+                  {/* Amount input */}
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="email">
-                      Email address
+                    <label className="form-label" htmlFor="amount">
+                      Amount
                     </label>
-                    <input type="email" id="email" className="form-control" />
+                    <input
+                      type="number"
+                      id="amount"
+                      className="form-control"
+                      placeholder="Enter amount"
+                    />
                   </div>
 
-                  {/* Status input */}
+                  {/* Delivery Method dropdown */}
+                  <div className="form-outline mb-4">
+                    <label className="form-label" htmlFor="deliveryMethod">
+                      Delivery Method
+                    </label>
+                    <select id="deliveryMethod" className="form-control">
+                      <option value="postal">Postal</option>
+                      <option value="express-postal">Express Postal</option>
+                      <option value="courier">Courier Service</option>
+                    </select>
+                  </div>
+
+                  {/* Status dropdown */}
                   <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="status">
                       Status
                     </label>
-                    <input
-                      type="text"
-                      id="status"
-                      className="form-control"
-                    />
+                    <select id="status" className="form-control">
+                      <option value="processing">Processing</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
                   </div>
 
                   {/* Submit button */}
