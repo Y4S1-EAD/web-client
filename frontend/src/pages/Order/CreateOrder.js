@@ -11,6 +11,19 @@ export default function CreateOrder() {
   const handleShow = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
 
+  // Function to determine the background color class
+  const getStatusBackgroundClass = () => {
+    switch (status) {
+      case "delivered":
+        return "bg-success text-white"; // Green background for delivered
+      case "cancelled":
+        return "bg-danger text-white"; // Red background for cancelled
+      case "processing":
+      default:
+        return "bg-warning text-dark"; // Yellow background for processing
+    }
+  };
+
   return (
     <>
       {/* Button to trigger the modal */}
@@ -89,14 +102,14 @@ export default function CreateOrder() {
 
                     {/* Right Column */}
                     <div className="col-md-6">
-                      {/* Status dropdown (without colors) */}
+                      {/* Status dropdown with background color */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="status">
                           Status
                         </label>
                         <select
                           id="status"
-                          className="form-control"
+                          className={`form-control ${getStatusBackgroundClass()}`} // Apply dynamic background color class
                           value={status}
                           onChange={(e) => setStatus(e.target.value)}
                         >
