@@ -5,6 +5,7 @@ import { faCirclePlus } from "@fortawesome/free-solid-svg-icons"; // Import the 
 export default function CreateOrder() {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
+  const [status, setStatus] = useState("processing"); // Initial status
 
   // Functions to open and close the modal
   const handleShow = () => setShowModal(true);
@@ -29,8 +30,8 @@ export default function CreateOrder() {
           role="dialog"
           style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
-          <div className="modal-dialog d-flex justify-content-center">
-            <div className="modal-content w-75">
+          <div className="modal-dialog modal-lg d-flex justify-content-center">
+            <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Create New Order</h5>
                 <button
@@ -40,56 +41,110 @@ export default function CreateOrder() {
                   aria-label="Close"
                 ></button>
               </div>
+              
+              {/* Full modal body without scrolling */}
               <div className="modal-body p-4">
                 <form>
-                  {/* Order Description input */}
-                  <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="orderDescription">
-                      Order Description
-                    </label>
-                    <input
-                      type="text"
-                      id="orderDescription"
-                      className="form-control"
-                      placeholder="Enter order description"
-                    />
-                  </div>
+                  <div className="row">
+                    {/* Left Column */}
+                    <div className="col-md-6">
+                      {/* Order Description input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="orderDescription">
+                          Order Description
+                        </label>
+                        <input
+                          type="text"
+                          id="orderDescription"
+                          className="form-control"
+                          placeholder="Enter order description"
+                        />
+                      </div>
 
-                  {/* Amount input */}
-                  <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="amount">
-                      Amount
-                    </label>
-                    <input
-                      type="number"
-                      id="amount"
-                      className="form-control"
-                      placeholder="Enter amount"
-                    />
-                  </div>
+                      {/* Amount input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="amount">
+                          Amount
+                        </label>
+                        <input
+                          type="number"
+                          id="amount"
+                          className="form-control"
+                          placeholder="Enter amount"
+                        />
+                      </div>
 
-                  {/* Delivery Method dropdown */}
-                  <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="deliveryMethod">
-                      Delivery Method
-                    </label>
-                    <select id="deliveryMethod" className="form-control">
-                      <option value="postal">Postal</option>
-                      <option value="express-postal">Express Postal</option>
-                      <option value="courier">Courier Service</option>
-                    </select>
-                  </div>
+                      {/* Delivery Method dropdown */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="deliveryMethod">
+                          Delivery Method
+                        </label>
+                        <select id="deliveryMethod" className="form-control">
+                          <option value="postal">Postal</option>
+                          <option value="express-postal">Express Postal</option>
+                          <option value="courier">Courier Service</option>
+                        </select>
+                      </div>
+                    </div>
 
-                  {/* Status dropdown */}
-                  <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="status">
-                      Status
-                    </label>
-                    <select id="status" className="form-control">
-                      <option value="processing">Processing</option>
-                      <option value="delivered">Delivered</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
+                    {/* Right Column */}
+                    <div className="col-md-6">
+                      {/* Status dropdown (without colors) */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="status">
+                          Status
+                        </label>
+                        <select
+                          id="status"
+                          className="form-control"
+                          value={status}
+                          onChange={(e) => setStatus(e.target.value)}
+                        >
+                          <option value="processing">Processing</option>
+                          <option value="delivered">Delivered</option>
+                          <option value="cancelled">Cancelled</option>
+                        </select>
+                      </div>
+
+                      {/* Payment ID input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="paymentId">
+                          Payment ID
+                        </label>
+                        <input
+                          type="text"
+                          id="paymentId"
+                          className="form-control"
+                          placeholder="Enter payment ID"
+                        />
+                      </div>
+
+                      {/* Product IDs input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="productIds">
+                          Product IDs (comma-separated)
+                        </label>
+                        <input
+                          type="text"
+                          id="productIds"
+                          className="form-control"
+                          placeholder="Enter product IDs"
+                        />
+                      </div>
+
+                      {/* User ID input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="userId">
+                          User ID
+                        </label>
+                        <input
+                          type="text"
+                          id="userId"
+                          className="form-control"
+                          placeholder="Enter user ID"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   {/* Submit button */}
