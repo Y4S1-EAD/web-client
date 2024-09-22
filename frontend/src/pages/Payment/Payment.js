@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import CreateOrder from './CreateOrder';
+import CreatePayment from './CreatePayment';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
@@ -10,24 +10,25 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4"; // DataTables import
 import axios from "axios"; // Import axios for fetching data
 
-export default function Order() {
-  const [orders, setOrders] = useState([]); // Store fetched orders
+export default function Payment() {
+  const [payments, setPayments] = useState([]); // Store fetched payments
   const [isDataLoaded, setIsDataLoaded] = useState(false); // To track when the data is loaded
 
   useEffect(() => {
-    // Fetch order data from the API
-    axios.get('http://localhost:2030/api/Orders')
-      .then(response => {
-        setOrders(response.data); // Set the fetched data to the state
+    // Fetch payment data from the API
+    axios
+      .get("http://localhost:2030/api/Payments")
+      .then((response) => {
+        setPayments(response.data); // Set the fetched data to the state
         setIsDataLoaded(true); // Set data loaded to true
       })
-      .catch(error => {
-        console.error("There was an error fetching the orders!", error);
+      .catch((error) => {
+        console.error("There was an error fetching the payments!", error);
       });
 
     return () => {
-      if ($.fn.DataTable.isDataTable("#example")) {
-        $("#example").DataTable().destroy(true); // Cleanup on component unmount
+      if ($.fn.DataTable.isDataTable("#paymentTable")) {
+        $("#paymentTable").DataTable().destroy(true); // Cleanup on component unmount
       }
     };
   }, []);
@@ -35,19 +36,22 @@ export default function Order() {
   useEffect(() => {
     // Initialize the DataTable only when data is loaded
     if (isDataLoaded) {
-      $('#example').DataTable(); // Initialize the DataTable after data is loaded
+      $("#paymentTable").DataTable(); // Initialize the DataTable after data is loaded
     }
   }, [isDataLoaded]); // This useEffect depends on data being loaded
 
   // Function to handle delete
-  const deleteOrder = (orderId) => {
-    axios.delete(`http://localhost:2030/api/Orders/${orderId}`)
-      .then(response => {
-        // Remove the deleted order from the state
-        setOrders(orders.filter(order => order.orderId !== orderId));
+  const deletePayment = (paymentId) => {
+    axios
+      .delete(`http://localhost:2030/api/Payments/${paymentId}`)
+      .then((response) => {
+        // Remove the deleted payment from the state
+        setPayments(
+          payments.filter((payment) => payment.paymentId !== paymentId)
+        );
       })
-      .catch(error => {
-        console.error("There was an error deleting the order!", error);
+      .catch((error) => {
+        console.error("There was an error deleting the payment!", error);
       });
   };
 
@@ -55,45 +59,39 @@ export default function Order() {
     <>
       <Header />
       <div className="container my-4">
-        <h2 className="mt-10">Order List</h2>
+        <h2 className="mt-10">Payment List</h2>
 
         <div className="d-flex justify-content-end mb-3">
-          <CreateOrder /> {/* Trigger the CreateOrder modal */}
+          <CreatePayment /> {/* Trigger the CreatePayment modal */}
         </div>
 
         <table
-          id="example"
+          id="paymentTable"
           className="table table-striped table-bordered"
           style={{ width: "100%" }}
         >
           <thead>
             <tr>
-              <th>Order ID</th>
-              <th>Order Date</th>
-              <th>Order Description</th>
+              <th>Payment ID</th>
+              <th>Payment Reference</th>
               <th>Amount</th>
-              <th>Delivery Method</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {orders.length > 0 ? (
-              orders.map((order) => (
-                <tr key={order.orderId}>
-                  <td>{order.orderId}</td>
-                  <td>{new Date(order.orderDate).toLocaleDateString()}</td>
-                  <td>{order.orderDescription}</td>
-                  <td>{order.amount}</td>
-                  <td>{order.deliveryMethod}</td>
-                  <td>{order.status}</td>
+            {payments.length > 0 ? (
+              payments.map((payment) => (
+                <tr key={payment.paymentId}>
+                  <td>{payment.paymentId}</td>
+                  <td>{payment.paymentReference}</td>
+                  <td>{payment.amount}</td>
                   <td>
                     <button className="btn btn-primary btn-sm me-2">
                       <FontAwesomeIcon icon={faEdit} /> Edit
                     </button>
                     <button
                       className="btn btn-danger btn-sm"
-                      onClick={() => deleteOrder(order.orderId)}
+                      onClick={() => deletePayment(payment.paymentId)}
                     >
                       <FontAwesomeIcon icon={faTrash} /> Delete
                     </button>
@@ -102,7 +100,7 @@ export default function Order() {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">
+                <td colSpan="4" className="text-center">
                   No data available
                 </td>
               </tr>
@@ -110,12 +108,9 @@ export default function Order() {
           </tbody>
           <tfoot>
             <tr>
-              <th>Order ID</th>
-              <th>Order Date</th>
-              <th>Order Description</th>
+              <th>Payment ID</th>
+              <th>Payment Reference</th>
               <th>Amount</th>
-              <th>Delivery Method</th>
-              <th>Status</th>
               <th>Actions</th>
             </tr>
           </tfoot>
