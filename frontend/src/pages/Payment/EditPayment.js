@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 export default function EditPayment({ payment, onPaymentUpdated }) {
-  // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
-
-  // Form fields
   const [paymentReference, setPaymentReference] = useState('');
   const [amount, setAmount] = useState('');
   const [userId, setUserId] = useState('');
   const [errors, setErrors] = useState([]);
 
-  // Open the modal and initialize form fields with payment data
   const handleShow = () => {
     setPaymentReference(payment.paymentReference || '');
     setAmount(payment.amount);
@@ -20,7 +18,6 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
     setShowModal(true);
   };
 
-  // Close the modal and reset form fields
   const handleClose = () => {
     setShowModal(false);
     setErrors([]);
@@ -36,36 +33,28 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
       userId,
     };
 
-    // Reset errors
     setErrors([]);
 
-    // Send PUT request to update the payment
     axios
       .put(`http://localhost:2030/api/Payments/${payment.paymentId}`, updatedPaymentData)
       .then((response) => {
-        // Handle success
         console.log('Payment updated successfully:', response.data);
         toast.success('Payment updated successfully!');
-        // Close the modal
         handleClose();
-        // Notify parent component to refresh the payment list
         if (onPaymentUpdated) {
           onPaymentUpdated(response.data.payment);
         }
       })
       .catch((error) => {
-        // Handle error
         console.error('There was an error updating the payment!', error);
         if (error.response && error.response.data) {
           const responseData = error.response.data;
-          console.log('Error response data:', responseData); // Log detailed error
           if (responseData.errors) {
             const errorMessages = [];
             for (const key in responseData.errors) {
               errorMessages.push(...responseData.errors[key]);
             }
             setErrors(errorMessages);
-            // Display error toast messages
             errorMessages.forEach((err) => toast.error(err));
           } else if (responseData.message) {
             setErrors([responseData.message]);
@@ -83,16 +72,14 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
 
   return (
     <>
-      {/* Button to trigger the modal */}
       <button
         type="button"
         className="btn btn-primary btn-sm me-2"
         onClick={handleShow}
       >
-        Edit
+        <FontAwesomeIcon icon={faEdit} className="me-1" /> Edit
       </button>
 
-      {/* Modal */}
       {showModal && (
         <div
           className="modal fade show"
@@ -111,8 +98,6 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                   aria-label="Close"
                 ></button>
               </div>
-
-              {/* Full modal body without scrolling */}
               <div className="modal-body p-4">
                 {errors.length > 0 && (
                   <div className="alert alert-danger">
@@ -125,9 +110,7 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                 )}
                 <form onSubmit={handleSubmit}>
                   <div className="row">
-                    {/* Left Column */}
                     <div className="col-md-6">
-                      {/* Payment Reference input */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="paymentReference">
                           Payment Reference
@@ -141,8 +124,6 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                           onChange={(e) => setPaymentReference(e.target.value)}
                         />
                       </div>
-
-                      {/* Amount input */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="amount">
                           Amount
@@ -158,10 +139,7 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                         />
                       </div>
                     </div>
-
-                    {/* Right Column */}
                     <div className="col-md-6">
-                      {/* User ID input */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="userId">
                           User ID
@@ -177,13 +155,9 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                       </div>
                     </div>
                   </div>
-
-                  {/* Submit button */}
                   <button type="submit" className="btn btn-primary btn-block">
                     Update
                   </button>
-
-                  {/* Close button inside the modal body */}
                   <button
                     type="button"
                     className="btn btn-secondary btn-block mt-3"
