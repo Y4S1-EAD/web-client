@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from 'react-toastify';
 
-export default function CreatePayment({ onPaymentCreated }) {
+export default function EditPayment({ payment, onPaymentUpdated }) {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
 
@@ -14,21 +12,25 @@ export default function CreatePayment({ onPaymentCreated }) {
   const [userId, setUserId] = useState('');
   const [errors, setErrors] = useState([]);
 
-  // Functions to open and close the modal
-  const handleShow = () => setShowModal(true);
+  // Open the modal and initialize form fields with payment data
+  const handleShow = () => {
+    setPaymentReference(payment.paymentReference || '');
+    setAmount(payment.amount);
+    setUserId(payment.userId);
+    setShowModal(true);
+  };
+
+  // Close the modal and reset form fields
   const handleClose = () => {
     setShowModal(false);
     setErrors([]);
-    setPaymentReference('');
-    setAmount('');
-    setUserId('');
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const paymentData = {
-      paymentId: "",
+    const updatedPaymentData = {
+      paymentId: payment.paymentId,
       paymentReference,
       amount: parseFloat(amount),
       userId,
@@ -37,24 +39,23 @@ export default function CreatePayment({ onPaymentCreated }) {
     // Reset errors
     setErrors([]);
 
-    // Post the data to the API
+    // Send PUT request to update the payment
     axios
-      .post('http://localhost:2030/api/Payments', paymentData)
+      .put(`http://localhost:2030/api/Payments/${payment.paymentId}`, updatedPaymentData)
       .then((response) => {
         // Handle success
-        console.log('Payment created successfully:', response.data);
-        // Close the modal and reset the form
-        toast.success('Payment created successfully!');
-        
+        console.log('Payment updated successfully:', response.data);
+        toast.success('Payment updated successfully!');
+        // Close the modal
         handleClose();
         // Notify parent component to refresh the payment list
-        if (onPaymentCreated) {
-          onPaymentCreated(response.data.payment);
+        if (onPaymentUpdated) {
+          onPaymentUpdated(response.data.payment);
         }
       })
       .catch((error) => {
         // Handle error
-        console.error('There was an error creating the payment!', error);
+        console.error('There was an error updating the payment!', error);
         if (error.response && error.response.data) {
           const responseData = error.response.data;
           console.log('Error response data:', responseData); // Log detailed error
@@ -85,10 +86,10 @@ export default function CreatePayment({ onPaymentCreated }) {
       {/* Button to trigger the modal */}
       <button
         type="button"
-        className="btn btn-success d-flex align-items-center"
+        className="btn btn-primary btn-sm me-2"
         onClick={handleShow}
       >
-        <FontAwesomeIcon icon={faCirclePlus} className="me-2" /> Create Payment
+        Edit
       </button>
 
       {/* Modal */}
@@ -102,7 +103,7 @@ export default function CreatePayment({ onPaymentCreated }) {
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Create New Payment</h5>
+                <h5 className="modal-title">Edit Payment</h5>
                 <button
                   type="button"
                   className="btn-close"
@@ -179,7 +180,7 @@ export default function CreatePayment({ onPaymentCreated }) {
 
                   {/* Submit button */}
                   <button type="submit" className="btn btn-primary btn-block">
-                    Submit
+                    Update
                   </button>
 
                   {/* Close button inside the modal body */}
