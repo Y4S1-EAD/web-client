@@ -64,6 +64,19 @@ export default function Order() {
     setOrders(updatedOrders);
   };
 
+  // Function to return background color class for the status
+  const getStatusBackgroundClass = (status) => {
+    switch (status.toLowerCase()) {
+      case "delivered":
+        return "bg-success text-white"; // Green background for delivered
+      case "cancelled":
+        return "bg-danger text-white"; // Red background for cancelled
+      case "processing":
+      default:
+        return "bg-warning text-dark"; // Yellow background for processing or default
+    }
+  };
+
   return (
     <>
       <Header />
@@ -98,7 +111,10 @@ export default function Order() {
                   <td>{order.orderDescription}</td>
                   <td>{order.amount}</td>
                   <td>{order.deliveryMethod}</td>
-                  <td>{order.status}</td>
+                  {/* Apply the background color class to the status column */}
+                  <td className={getStatusBackgroundClass(order.status)}>
+                    {order.status}
+                  </td>
                   <td>
                     <EditOrder order={order} onOrderUpdated={handleOrderUpdated} />
                     <button
