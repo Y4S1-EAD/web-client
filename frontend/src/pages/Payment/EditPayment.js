@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { toast } from 'react-toastify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import {toast} from "react-toastify";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit} from "@fortawesome/free-solid-svg-icons";
 
-export default function EditPayment({ payment, onPaymentUpdated }) {
+export default function EditPayment({payment, onPaymentUpdated}) {
   const [showModal, setShowModal] = useState(false);
-  const [paymentReference, setPaymentReference] = useState('');
-  const [amount, setAmount] = useState('');
-  const [userId, setUserId] = useState('');
+  const [paymentReference, setPaymentReference] = useState("");
+  const [amount, setAmount] = useState("");
+  const [userId, setUserId] = useState("");
   const [errors, setErrors] = useState([]);
 
   const handleShow = () => {
-    setPaymentReference(payment.paymentReference || '');
+    setPaymentReference(payment.paymentReference || "");
     setAmount(payment.amount);
     setUserId(payment.userId);
     setShowModal(true);
@@ -36,17 +36,20 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
     setErrors([]);
 
     axios
-      .put(`http://localhost:2030/api/Payments/${payment.paymentId}`, updatedPaymentData)
+      .put(
+        `${process.env.REACT_APP_WEB_API}/Payments/${payment.paymentId}`,
+        updatedPaymentData
+      )
       .then((response) => {
-        console.log('Payment updated successfully:', response.data);
-        toast.success('Payment updated successfully!');
+        console.log("Payment updated successfully:", response.data);
+        toast.success("Payment updated successfully!");
         handleClose();
         if (onPaymentUpdated) {
           onPaymentUpdated(response.data.payment);
         }
       })
       .catch((error) => {
-        console.error('There was an error updating the payment!', error);
+        console.error("There was an error updating the payment!", error);
         if (error.response && error.response.data) {
           const responseData = error.response.data;
           if (responseData.errors) {
@@ -60,12 +63,12 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
             setErrors([responseData.message]);
             toast.error(responseData.message);
           } else {
-            setErrors(['An unexpected error occurred.']);
-            toast.error('An unexpected error occurred.');
+            setErrors(["An unexpected error occurred."]);
+            toast.error("An unexpected error occurred.");
           }
         } else {
-          setErrors(['An unexpected error occurred.']);
-          toast.error('An unexpected error occurred.');
+          setErrors(["An unexpected error occurred."]);
+          toast.error("An unexpected error occurred.");
         }
       });
   };
@@ -85,7 +88,7 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)"}}
         >
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
@@ -112,7 +115,10 @@ export default function EditPayment({ payment, onPaymentUpdated }) {
                   <div className="row">
                     <div className="col-md-6">
                       <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="paymentReference">
+                        <label
+                          className="form-label"
+                          htmlFor="paymentReference"
+                        >
                           Payment Reference
                         </label>
                         <input

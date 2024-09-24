@@ -39,7 +39,7 @@ export default function CreatePayment({ onPaymentCreated }) {
 
     // Post the data to the API
     axios
-      .post('http://localhost:2030/api/Payments', paymentData)
+      .post(`${process.env.REACT_APP_WEB_API}/Payments`, paymentData)
       .then((response) => {
         // Handle success
         console.log('Payment created successfully:', response.data);

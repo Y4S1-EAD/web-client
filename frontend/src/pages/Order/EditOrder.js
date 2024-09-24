@@ -1,12 +1,12 @@
 // EditOrder.js
 
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import {toast} from "react-toastify";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit} from "@fortawesome/free-solid-svg-icons";
 
-export default function EditOrder({ order, onOrderUpdated }) {
+export default function EditOrder({order, onOrderUpdated}) {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
 
@@ -71,7 +71,10 @@ export default function EditOrder({ order, onOrderUpdated }) {
 
     // Send PUT request to update the order
     axios
-      .put(`http://localhost:2030/api/Orders/${order.orderId}`, updatedOrderData)
+      .put(
+        `${process.env.REACT_APP_WEB_API}/Orders/${order.orderId}`,
+        updatedOrderData
+      )
       .then((response) => {
         // Handle success
         console.log("Order updated successfully:", response.data);
@@ -128,7 +131,7 @@ export default function EditOrder({ order, onOrderUpdated }) {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)"}}
         >
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
@@ -159,7 +162,10 @@ export default function EditOrder({ order, onOrderUpdated }) {
                     <div className="col-md-6">
                       {/* Order Description input */}
                       <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="orderDescription">
+                        <label
+                          className="form-label"
+                          htmlFor="orderDescription"
+                        >
                           Order Description
                         </label>
                         <input
