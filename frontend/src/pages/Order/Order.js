@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import CreateOrder from "./CreateOrder";
 import EditOrder from "./EditOrder"; // Import EditOrder component
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4"; // DataTables import
 import axios from "axios";
-import {ToastContainer, toast} from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Order() {
@@ -91,7 +91,7 @@ export default function Order() {
         <table
           id="orderTable"
           className="table table-striped table-bordered"
-          style={{width: "100%"}}
+          style={{ width: "100%" }}
         >
           <thead>
             <tr>

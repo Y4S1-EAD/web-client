@@ -1,12 +1,12 @@
 // EditOrder.js
 
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import {toast} from "react-toastify";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faEdit} from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 
-export default function EditOrder({order, onOrderUpdated}) {
+export default function EditOrder({ order, onOrderUpdated }) {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
 
@@ -131,7 +131,7 @@ export default function EditOrder({order, onOrderUpdated}) {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)"}}
+          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
