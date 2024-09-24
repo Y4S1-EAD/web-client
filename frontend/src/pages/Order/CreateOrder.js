@@ -1,12 +1,12 @@
 // CreateOrder.js
 
-import React, {useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCirclePlus} from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
-export default function CreateOrder({onOrderCreated}) {
+export default function CreateOrder({ onOrderCreated }) {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
 
@@ -125,7 +125,7 @@ export default function CreateOrder({onOrderCreated}) {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)"}}
+          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
         >
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
