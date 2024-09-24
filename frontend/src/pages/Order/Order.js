@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
-import CreateOrder from './CreateOrder';
-import EditOrder from './EditOrder'; // Import EditOrder component
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import CreateOrder from "./CreateOrder";
+import EditOrder from "./EditOrder"; // Import EditOrder component
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4"; // DataTables import
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer, toast} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:2030/api/Orders')
-      .then(response => {
+    axios
+      .get(`${process.env.REACT_APP_WEB_API}/Orders`)
+      .then((response) => {
         setOrders(response.data);
         setIsDataLoaded(true);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching orders:", error);
         toast.error("Error fetching orders.");
       });
@@ -37,17 +38,18 @@ export default function Order() {
 
   useEffect(() => {
     if (isDataLoaded) {
-      $('#orderTable').DataTable();
+      $("#orderTable").DataTable();
     }
   }, [isDataLoaded]);
 
   const deleteOrder = (orderId) => {
-    axios.delete(`http://localhost:2030/api/Orders/${orderId}`)
-      .then(response => {
-        setOrders(orders.filter(order => order.orderId !== orderId));
+    axios
+      .delete(`${process.env.REACT_APP_WEB_API}/Orders/${orderId}`)
+      .then((response) => {
+        setOrders(orders.filter((order) => order.orderId !== orderId));
         toast.success("Order deleted successfully!");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error deleting order:", error);
         toast.error("Error deleting order.");
       });
@@ -58,7 +60,7 @@ export default function Order() {
   };
 
   const handleOrderUpdated = (updatedOrder) => {
-    const updatedOrders = orders.map(order =>
+    const updatedOrders = orders.map((order) =>
       order.orderId === updatedOrder.orderId ? updatedOrder : order
     );
     setOrders(updatedOrders);
@@ -89,7 +91,7 @@ export default function Order() {
         <table
           id="orderTable"
           className="table table-striped table-bordered"
-          style={{ width: "100%" }}
+          style={{width: "100%"}}
         >
           <thead>
             <tr>
@@ -104,7 +106,7 @@ export default function Order() {
           </thead>
           <tbody>
             {orders.length > 0 ? (
-              orders.map(order => (
+              orders.map((order) => (
                 <tr key={order.orderId}>
                   <td>{order.orderId}</td>
                   <td>{new Date(order.orderDate).toLocaleDateString()}</td>
@@ -116,7 +118,10 @@ export default function Order() {
                     {order.status}
                   </td>
                   <td>
-                    <EditOrder order={order} onOrderUpdated={handleOrderUpdated} />
+                    <EditOrder
+                      order={order}
+                      onOrderUpdated={handleOrderUpdated}
+                    />
                     <button
                       className="btn btn-danger btn-sm"
                       onClick={() => deleteOrder(order.orderId)}
@@ -128,7 +133,9 @@ export default function Order() {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">No data available</td>
+                <td colSpan="7" className="text-center">
+                  No data available
+                </td>
               </tr>
             )}
           </tbody>

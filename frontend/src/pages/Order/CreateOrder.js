@@ -1,12 +1,12 @@
 // CreateOrder.js
 
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import React, {useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCirclePlus} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
-export default function CreateOrder({ onOrderCreated }) {
+export default function CreateOrder({onOrderCreated}) {
   // State to manage the modal visibility
   const [showModal, setShowModal] = useState(false);
 
@@ -67,7 +67,7 @@ export default function CreateOrder({ onOrderCreated }) {
 
     // Post the data to the API
     axios
-      .post("http://localhost:2030/api/Orders", orderData)
+      .post(`${process.env.REACT_APP_WEB_API}/Orders`, orderData)
       .then((response) => {
         // Handle success
         console.log("Order created successfully:", response.data);
@@ -125,7 +125,7 @@ export default function CreateOrder({ onOrderCreated }) {
           className="modal fade show"
           tabIndex="-1"
           role="dialog"
-          style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+          style={{display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)"}}
         >
           <div className="modal-dialog modal-lg d-flex justify-content-center">
             <div className="modal-content">
@@ -156,7 +156,10 @@ export default function CreateOrder({ onOrderCreated }) {
                     <div className="col-md-6">
                       {/* Order Description input */}
                       <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="orderDescription">
+                        <label
+                          className="form-label"
+                          htmlFor="orderDescription"
+                        >
                           Order Description
                         </label>
                         <input

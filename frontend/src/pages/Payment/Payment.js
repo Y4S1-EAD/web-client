@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import CreatePayment from "./CreatePayment";
 import EditPayment from "./EditPayment";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4";
 import axios from "axios";
-import { ToastContainer,toast } from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
 
 export default function Payment() {
   const [payments, setPayments] = useState([]);
@@ -34,7 +34,7 @@ export default function Payment() {
 
   const fetchPayments = () => {
     axios
-      .get("http://localhost:2030/api/Payments")
+      .get(`${process.env.REACT_APP_WEB_API}/Payments`)
       .then((response) => {
         setPayments(response.data);
         setIsDataLoaded(true);
@@ -47,7 +47,7 @@ export default function Payment() {
   // Function to handle delete
   const deletePayment = (paymentId) => {
     axios
-      .delete(`http://localhost:2030/api/Payments/${paymentId}`)
+      .delete(`${process.env.REACT_APP_WEB_API}/Payments/${paymentId}`)
       .then((response) => {
         // Remove the deleted payment from the state
         setPayments(
@@ -90,7 +90,7 @@ export default function Payment() {
         <table
           id="paymentTable"
           className="table table-striped table-bordered"
-          style={{ width: "100%" }}
+          style={{width: "100%"}}
         >
           <thead>
             <tr>
