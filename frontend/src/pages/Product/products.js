@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import $ from "jquery";
 import "datatables.net";
 import "datatables.net-dt/css/dataTables.dataTables.min.css";
+//  boostrap datatable
+import "bootstrap/dist/css/bootstrap.min.css";
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"; // For Bootstrap styling
+import dt from "datatables.net-bs4"; // DataTables Bootstrap integration
 import { Modal, Button } from "react-bootstrap"; // For Bootstrap modals
 import axios from "axios";
 import Header from "../../components/Header";
@@ -13,6 +17,7 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
 import { Link } from "react-router-dom";
+import Footer from "../../components/Footer";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -20,13 +25,15 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
-  const [imageBase64, setImageBase64] = useState(""); // Store Base64 image for editing
+  const [imageBase64, setImageBase64] = useState("");
   const [allCategories, setAllCategories] = useState([]); // Store all categories for the dropdown
 
   // Fetch all products
   const fetchProducts = async () => {
     try {
-      const response = await axios.get("http://localhost:5032/api/Products");
+      const response = await axios.get(
+        `${process.env.REACT_APP_WEB_API}/Products`
+      );
       const productsData = response.data;
 
       // Fetch categories for each product
@@ -35,7 +42,7 @@ const Products = () => {
         productsData.map(async (product) => {
           if (!categoriesData[product.categoryId]) {
             const categoryResponse = await axios.get(
-              `http://localhost:5032/api/Category/${product.categoryId}`
+              `${process.env.REACT_APP_WEB_API}/Category/${product.categoryId}`
             );
             categoriesData[product.categoryId] =
               categoryResponse.data.categoryName;
@@ -52,29 +59,31 @@ const Products = () => {
 
   const fetchAllCategories = async () => {
     try {
-      const response = await axios.get("http://localhost:5032/api/Category");
-      setAllCategories(response.data); // Store all categories for the dropdown
+      const response = await axios.get(
+        `${process.env.REACT_APP_WEB_API}/Category`
+      );
+      setAllCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
   };
 
-  // Initialize DataTables and fetch data
   useEffect(() => {
     fetchProducts();
     fetchAllCategories(); // Fetch all categories for the dropdown
-    setTimeout(() => {
-      $("#productsTable").DataTable(); // Use jQuery to initialize DataTables
-    }, 1000);
+
+    return () => {
+      if ($.fn.DataTable.isDataTable("#productsTable")) {
+        $("#productsTable").DataTable().destroy(true); // Destroy previous instance before reinitializing
+      }
+    };
   }, []);
 
-  // // Initialize DataTables after the component mounts
-  // useEffect(() => {
-  //   fetchProducts();
-  //   setTimeout(() => {
-  //     $("#productsTable").DataTable(); // Use jQuery to initialize DataTables
-  //   }, 1000);
-  // }, []);
+  useEffect(() => {
+    if (products.length > 0) {
+      $("#productsTable").DataTable(); // Initialize DataTables with Bootstrap styling
+    }
+  }, [products]); // Only initialize DataTables after products are loaded
 
   // Handle modal actions
   const handleShowModal = (type, product) => {
@@ -114,7 +123,7 @@ const Products = () => {
 
     try {
       await axios.put(
-        `http://localhost:5032/api/Products/${selectedProduct.productId}`,
+        `${process.env.REACT_APP_WEB_API}/Products/${selectedProduct.productId}`,
         updatedProduct
       );
       setProducts(
@@ -137,7 +146,7 @@ const Products = () => {
 
     try {
       await axios.delete(
-        `http://localhost:5032/api/Products/${selectedProduct.productId}`
+        `${process.env.REACT_APP_WEB_API}/Products/${selectedProduct.productId}`
       );
       setProducts(
         products.filter(
@@ -163,9 +172,15 @@ const Products = () => {
             Add Product
           </button>
         </Link>
-        <table id="productsTable" className="display">
+
+        <table
+          id="productsTable"
+          className="table table-striped table-bordered"
+          style={{ width: "100%" }}
+        >
           <thead>
             <tr>
+              <th>#</th>
               <th>Product Name</th>
               <th>Image</th>
               <th>Description</th>
@@ -176,42 +191,51 @@ const Products = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
-              <tr key={product.productId}>
-                <td>{product.productName}</td>
-                <td>
-                  <img
-                    src={product.image}
-                    alt={product.productName}
-                    style={{ width: "50px" }}
-                  />
-                </td>
-                <td>{product.productDescription}</td>
-                <td>{product.price}</td>
-                <td>{product.stock}</td>
-                <td>{categories[product.categoryId] || "Loading..."}</td>
-                <td>
-                  <button
-                    className="mx-1 btn btn-info btn-sm"
-                    onClick={() => handleShowModal("view", product)}
-                  >
-                    <FontAwesomeIcon icon={faEye} />
-                  </button>
-                  <button
-                    className="mx-1 btn btn-warning btn-sm"
-                    onClick={() => handleShowModal("edit", product)}
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  <button
-                    className="mx-1 btn btn-danger btn-sm"
-                    onClick={() => handleShowModal("delete", product)}
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
+            {products.length > 0 ? (
+              products.map((product, index) => (
+                <tr key={product.productId}>
+                  <td>{index + 1}</td>
+                  <td>{product.productName}</td>
+                  <td>
+                    <img
+                      src={product.image}
+                      alt={product.productName}
+                      style={{ width: "50px" }}
+                    />
+                  </td>
+                  <td>{product.productDescription}</td>
+                  <td>{product.price}</td>
+                  <td>{product.stock}</td>
+                  <td>{categories[product.categoryId] || "Loading..."}</td>
+                  <td>
+                    <button
+                      className="mx-1 btn btn-info btn-sm"
+                      onClick={() => handleShowModal("view", product)}
+                    >
+                      <FontAwesomeIcon icon={faEye} />
+                    </button>
+                    <button
+                      className="mx-1 btn btn-warning btn-sm"
+                      onClick={() => handleShowModal("edit", product)}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                    <button
+                      className="mx-1 btn btn-danger btn-sm"
+                      onClick={() => handleShowModal("delete", product)}
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center">
+                  No data available
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>
@@ -355,6 +379,8 @@ const Products = () => {
           )}
         </Modal.Footer>
       </Modal>
+
+      <Footer />
     </>
   );
 };

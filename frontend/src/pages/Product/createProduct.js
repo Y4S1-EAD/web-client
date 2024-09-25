@@ -24,7 +24,7 @@ const AddProductPage = () => {
     // Fetch categories when component mounts
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("http://localhost:5032/api/Category");
+        const response = await axios.get(`${process.env.REACT_APP_WEB_API}/Category`);
         setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -34,7 +34,7 @@ const AddProductPage = () => {
     // Fetch vendors (filter users with the role 'Vendor')
     const fetchVendors = async () => {
       try {
-        const response = await axios.get("http://localhost:5032/api/Users");
+        const response = await axios.get(`${process.env.REACT_APP_WEB_API}/Users`);
         const vendorsData = response.data.filter(
           (user) => user.role === "Vendor"
         );
@@ -75,7 +75,7 @@ const AddProductPage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5032/api/Products",
+        `${process.env.REACT_APP_WEB_API}/Products`,
         productData,
         {
           headers: {
@@ -219,8 +219,9 @@ const AddProductPage = () => {
                     as="select"
                     name="vendorId"
                     onChange={handleChange}
+                    required
                   >
-                    <option>Select a vendor</option>
+                    <option value="">Select a vendor</option>
                     {vendors.map((vendor) => (
                       <option key={vendor.userId} value={vendor.userId}>
                         {vendor.username}
