@@ -8,27 +8,28 @@ import Order from "./pages/Order/Order";
 import Payment from "./pages/Payment/Payment";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Products from "./pages/Product/products";
+import CreateProduct from "./pages/Product/createProduct";
 
 export default function App() {
   return (
     <Router>
-      <>
-        <Header />
-        <ToastContainer position="top-right" autoClose={5000} />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <Footer />
-              </>
-            }
-          />
-          <Route path="/order" element={<Order />} />
-          <Route path="/payment" element={<Payment />} />
-        </Routes>
-      </>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <Header />
+              <Hero />
+              <Footer />
+            </>
+          }
+        />
+        <Route path="/order" element={<Order />} />
+        {/* product routes */}
+        <Route path="/products" element={<Products />} />
+        <Route path="/create-product" element={<CreateProduct />} /> 
+      </Routes>
     </Router>
   );
 }
