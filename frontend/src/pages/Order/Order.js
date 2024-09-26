@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import CreateOrder from "./CreateOrder";
-import EditOrder from "./EditOrder"; // Import EditOrder component
+import EditOrder from "./EditOrder";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
-import dt from "datatables.net-bs4"; // DataTables import
+import dt from "datatables.net-bs4";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -70,12 +70,12 @@ export default function Order() {
   const getStatusBackgroundClass = (status) => {
     switch (status.toLowerCase()) {
       case "delivered":
-        return "bg-success text-white"; // Green background for delivered
+        return "bg-success text-white";
       case "cancelled":
-        return "bg-danger text-white"; // Red background for cancelled
+        return "bg-danger text-white";
       case "processing":
       default:
-        return "bg-warning text-dark"; // Yellow background for processing or default
+        return "bg-warning text-dark";
     }
   };
 
@@ -101,6 +101,8 @@ export default function Order() {
               <th>Amount</th>
               <th>Delivery Method</th>
               <th>Status</th>
+              <th>Phone Number</th>
+              <th>Delivery Address</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -113,10 +115,11 @@ export default function Order() {
                   <td>{order.orderDescription}</td>
                   <td>{order.amount}</td>
                   <td>{order.deliveryMethod}</td>
-                  {/* Apply the background color class to the status column */}
                   <td className={getStatusBackgroundClass(order.status)}>
                     {order.status}
                   </td>
+                  <td>{order.phoneNumber}</td>
+                  <td>{order.deliveryAddress}</td>
                   <td>
                     <EditOrder
                       order={order}
@@ -126,14 +129,14 @@ export default function Order() {
                       className="btn btn-danger btn-sm"
                       onClick={() => deleteOrder(order.orderId)}
                     >
-                      <FontAwesomeIcon icon={faTrash} /> Delete
+                      <FontAwesomeIcon icon={faTrash} />
                     </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="text-center">
+                <td colSpan="9" className="text-center">
                   No data available
                 </td>
               </tr>
