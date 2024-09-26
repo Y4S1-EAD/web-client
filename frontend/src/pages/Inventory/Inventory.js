@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import $ from "jquery";
-
-//  boostrap datatable
 import "bootstrap/dist/css/bootstrap.min.css";
-import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"; // For Bootstrap styling
-import dt from "datatables.net-bs4"; // DataTables Bootstrap integration
-import { Modal, Button } from "react-bootstrap"; // For Bootstrap modals
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"; 
+import dt from "datatables.net-bs4"; 
+import { Modal, Button } from "react-bootstrap"; 
 import axios from "axios";
 import Header from "../../components/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,18 +12,19 @@ import {
   faTrash,
   faEye,
   faPlus,
-} from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
+} from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer";
 
-const Products = () => {
+const Inventory = () => {
+  const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState({});
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [imageBase64, setImageBase64] = useState("");
-  const [allCategories, setAllCategories] = useState([]); // Store all categories for the dropdown
+  const [allCategories, setAllCategories] = useState([]);
 
   // Fetch all products
   const fetchProducts = async () => {
@@ -69,7 +68,7 @@ const Products = () => {
 
   useEffect(() => {
     fetchProducts();
-    fetchAllCategories(); // Fetch all categories for the dropdown
+    fetchAllCategories(); 
 
     return () => {
       if ($.fn.DataTable.isDataTable("#productsTable")) {
@@ -84,7 +83,10 @@ const Products = () => {
     }
   }, [products]); // Only initialize DataTables after products are loaded
 
-  // Handle modal actions
+  const handleInventoryCreated = (newOrder) => {
+    setOrders([...orders, newOrder]);
+  };
+
   const handleShowModal = (type, product) => {
     setSelectedProduct(product);
     setModalType(type);
@@ -101,9 +103,9 @@ const Products = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageBase64(reader.result); // Store Base64 image for edit
+        setImageBase64(reader.result);
       };
-      reader.readAsDataURL(file); // Convert image to Base64
+      reader.readAsDataURL(file);
     }
   };
 
@@ -116,8 +118,8 @@ const Products = () => {
       ).value,
       price: document.querySelector('input[name="price"]').value,
       stock: document.querySelector('input[name="stock"]').value,
-      categoryId: document.querySelector('select[name="category"]').value, // Get the updated category from dropdown
-      image: imageBase64 || selectedProduct.image, // Use new image if uploaded, otherwise keep the old one
+      categoryId: document.querySelector('select[name="category"]').value,
+      image: imageBase64 || selectedProduct.image,
     };
 
     try {
@@ -164,11 +166,11 @@ const Products = () => {
     <>
       <Header />
       <div className="container">
-        <h1 className="my-4">Products List</h1>
-        <Link to="/create-product">
+        <h1 className="my-4">Inventory</h1>
+        <Link to="/create-inventory">
           <button className="my-3 btn btn-primary float-end">
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
-            Add Product
+            Add Item
           </button>
         </Link>
 
@@ -180,7 +182,7 @@ const Products = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
+              <th>Product Name</th>
               <th>Image</th>
               <th style={{ width: "20%" }}>Description</th>
               <th>Price</th>
@@ -203,8 +205,8 @@ const Products = () => {
                     />
                   </td>
                   <td>
-                    {product.productDescription.length > 40
-                      ? product.productDescription.substring(0, 40) + "..."
+                    {product.productDescription.length > 50
+                      ? product.productDescription.substring(0, 50) + "..."
                       : product.productDescription}
                   </td>
                   <td>{product.price}</td>
@@ -388,4 +390,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Inventory;

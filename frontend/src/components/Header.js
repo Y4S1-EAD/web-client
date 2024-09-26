@@ -8,6 +8,8 @@ const navigation = [
   { name: "Products", href: "/products" },
   { name: "Orders", href: "/order" },
   { name: "Payments", href: "/payment" },
+  { name: "Inventory", href: "/inventory" },
+  { name: "Categories", href: "/categories" },
 ];
 
 export default function Header() {
