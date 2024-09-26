@@ -1,5 +1,3 @@
-// CreateOrder.js
-
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
@@ -18,6 +16,8 @@ export default function CreateOrder({ onOrderCreated }) {
   const [paymentId, setPaymentId] = useState("");
   const [productIds, setProductIds] = useState("");
   const [userId, setUserId] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [deliveryAddress, setDeliveryAddress] = useState("");
   const [errors, setErrors] = useState([]);
 
   // Functions to open and close the modal
@@ -32,23 +32,90 @@ export default function CreateOrder({ onOrderCreated }) {
     setPaymentId("");
     setProductIds("");
     setUserId("");
+    setPhoneNumber("");
+    setDeliveryAddress("");
   };
 
   // Function to determine the background color class
   const getStatusBackgroundClass = () => {
     switch (status) {
       case "delivered":
-        return "bg-success text-white"; // Green background for delivered
+        return "bg-success text-white";
       case "cancelled":
-        return "bg-danger text-white"; // Red background for cancelled
+        return "bg-danger text-white";
       case "processing":
       default:
-        return "bg-warning text-dark"; // Yellow background for processing
+        return "bg-warning text-dark";
     }
+  };
+
+  // Function to validate Sri Lankan phone number format
+  const validatePhoneNumber = (number) => {
+    // Remove spaces and hyphens
+    const cleanedNumber = number.replace(/[\s-]/g, "");
+
+    // Regex for Sri Lankan phone numbers
+    const localFormat = /^0(7[0-9]{8})$/; // e.g., 0771234567
+    const internationalFormat = /^\+94(7[0-9]{8})$/; // e.g., +94771234567
+
+    return localFormat.test(cleanedNumber) || internationalFormat.test(cleanedNumber);
+  };
+
+  // Function to fetch user data based on userId
+  const fetchUserData = () => {
+    if (userId.trim() === "") {
+      toast.error("User ID is required to fetch user data.");
+      return;
+    }
+
+    axios
+      .get(`${process.env.REACT_APP_WEB_API}/Users/${userId}`)
+      .then((response) => {
+        const userData = response.data;
+        // Update phoneNumber and deliveryAddress if they are empty
+        if (!phoneNumber) {
+          setPhoneNumber(userData.phoneNumber.toString());
+        }
+        if (!deliveryAddress) {
+          setDeliveryAddress(userData.address || "");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        toast.error("User not found or error fetching user data.");
+      });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Reset errors
+    setErrors([]);
+
+    // Client-side validation
+    const errorMessages = [];
+
+    if (!userId) {
+      errorMessages.push("User ID is required.");
+    }
+
+    if (!phoneNumber) {
+      errorMessages.push("Phone number is required.");
+    } else if (!validatePhoneNumber(phoneNumber)) {
+      errorMessages.push("Invalid Sri Lankan phone number format.");
+    }
+
+    if (!deliveryAddress) {
+      errorMessages.push("Delivery address is required.");
+    }
+
+    // Add other field validations as needed (e.g., amount, paymentId, etc.)
+
+    if (errorMessages.length > 0) {
+      setErrors(errorMessages);
+      errorMessages.forEach((err) => toast.error(err));
+      return;
+    }
 
     const orderData = {
       orderId: "",
@@ -60,10 +127,9 @@ export default function CreateOrder({ onOrderCreated }) {
       paymentId,
       productIds: productIds.split(",").map((id) => id.trim()),
       userId,
+      phoneNumber,
+      deliveryAddress,
     };
-
-    // Reset errors
-    setErrors([]);
 
     // Post the data to the API
     axios
@@ -77,7 +143,7 @@ export default function CreateOrder({ onOrderCreated }) {
         handleClose();
         // Notify parent component to refresh the order list
         if (onOrderCreated) {
-          onOrderCreated(response.data);
+          onOrderCreated(response.data.order); // Access the 'order' object in response
         }
       })
       .catch((error) => {
@@ -85,7 +151,7 @@ export default function CreateOrder({ onOrderCreated }) {
         console.error("There was an error creating the order!", error);
         if (error.response && error.response.data) {
           const responseData = error.response.data;
-          console.log("Error response data:", responseData); // Log detailed error
+          console.log("Error response data:", responseData);
           if (responseData.errors) {
             const errorMessages = [];
             for (const key in responseData.errors) {
@@ -154,12 +220,54 @@ export default function CreateOrder({ onOrderCreated }) {
                   <div className="row">
                     {/* Left Column */}
                     <div className="col-md-6">
+                      {/* User ID input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="userId">
+                          User ID
+                        </label>
+                        <input
+                          type="text"
+                          id="userId"
+                          className="form-control"
+                          placeholder="Enter user ID"
+                          value={userId}
+                          onChange={(e) => setUserId(e.target.value)}
+                          onBlur={fetchUserData} // Fetch user data when field loses focus
+                        />
+                      </div>
+
+                      {/* Phone Number input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="phoneNumber">
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          id="phoneNumber"
+                          className="form-control"
+                          placeholder="Enter phone number"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                        />
+                      </div>
+
+                      {/* Delivery Address input */}
+                      <div className="form-outline mb-4">
+                        <label className="form-label" htmlFor="deliveryAddress">
+                          Delivery Address
+                        </label>
+                        <textarea
+                          id="deliveryAddress"
+                          className="form-control"
+                          placeholder="Enter delivery address"
+                          value={deliveryAddress}
+                          onChange={(e) => setDeliveryAddress(e.target.value)}
+                        ></textarea>
+                      </div>
+
                       {/* Order Description input */}
                       <div className="form-outline mb-4">
-                        <label
-                          className="form-label"
-                          htmlFor="orderDescription"
-                        >
+                        <label className="form-label" htmlFor="orderDescription">
                           Order Description
                         </label>
                         <input
@@ -186,7 +294,10 @@ export default function CreateOrder({ onOrderCreated }) {
                           onChange={(e) => setAmount(e.target.value)}
                         />
                       </div>
+                    </div>
 
+                    {/* Right Column */}
+                    <div className="col-md-6">
                       {/* Delivery Method dropdown */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="deliveryMethod">
@@ -203,10 +314,7 @@ export default function CreateOrder({ onOrderCreated }) {
                           <option value="courier">Courier Service</option>
                         </select>
                       </div>
-                    </div>
 
-                    {/* Right Column */}
-                    <div className="col-md-6">
                       {/* Status dropdown with background color */}
                       <div className="form-outline mb-4">
                         <label className="form-label" htmlFor="status">
@@ -214,7 +322,7 @@ export default function CreateOrder({ onOrderCreated }) {
                         </label>
                         <select
                           id="status"
-                          className={`form-control ${getStatusBackgroundClass()}`} // Apply dynamic background color class
+                          className={`form-control ${getStatusBackgroundClass()}`}
                           value={status}
                           onChange={(e) => setStatus(e.target.value)}
                         >
@@ -251,21 +359,6 @@ export default function CreateOrder({ onOrderCreated }) {
                           placeholder="Enter product IDs"
                           value={productIds}
                           onChange={(e) => setProductIds(e.target.value)}
-                        />
-                      </div>
-
-                      {/* User ID input */}
-                      <div className="form-outline mb-4">
-                        <label className="form-label" htmlFor="userId">
-                          User ID
-                        </label>
-                        <input
-                          type="text"
-                          id="userId"
-                          className="form-control"
-                          placeholder="Enter user ID"
-                          value={userId}
-                          onChange={(e) => setUserId(e.target.value)}
                         />
                       </div>
                     </div>
