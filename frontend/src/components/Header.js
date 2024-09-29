@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { Dialog, DialogPanel } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import {useState} from "react";
+import {Dialog, DialogPanel} from "@headlessui/react";
+import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
+import {Link} from "react-router-dom";
+import Logo from "../assets/logo.png";
 
 const navigation = [
-  { name: "Users", href: "#" },
-  { name: "Products", href: "/products" },
-  { name: "Orders", href: "/order" },
-  { name: "Payments", href: "/payment" },
-  { name: "Inventory", href: "/inventory" },
-  { name: "Categories", href: "/categories" },
+  {name: "Users", href: "#"},
+  {name: "Products", href: "/products"},
+  {name: "Orders", href: "/order"},
+  {name: "Payments", href: "/payment"},
+  {name: "Inventory", href: "/inventory"},
+  {name: "Categories", href: "/categories"},
 ];
 
 export default function Header() {
@@ -24,11 +25,7 @@ export default function Header() {
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
             <span className="sr-only">Your Company</span>
-            <img
-              alt="Logo"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              className="w-auto h-8"
-            />
+            <img alt="Logo" src={Logo} className="w-auto h-20" />
           </Link>
         </div>
         <div className="flex lg:hidden">
