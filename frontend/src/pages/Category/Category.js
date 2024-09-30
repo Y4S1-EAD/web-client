@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Modal, Button } from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {Modal, Button} from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { toast } from "react-toastify";
+import {toast} from "react-toastify";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -18,12 +18,14 @@ const Category = () => {
     categoryDescription: "",
     isActive: true,
   });
-  const [errors, setErrors] = useState({}); 
+  const [errors, setErrors] = useState({});
 
   // Fetch all categories
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_WEB_API}/Category`);
+      const response = await axios.get(
+        `${process.env.REACT_APP_WEB_API}/Category`
+      );
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -39,7 +41,7 @@ const Category = () => {
   const handleShowModal = (type, category = null) => {
     setSelectedCategory(category);
     setModalType(type);
-    setErrors({}); 
+    setErrors({});
 
     if (category) {
       setNewCategoryData({
@@ -67,7 +69,10 @@ const Category = () => {
     if (!newCategoryData.categoryName) {
       newErrors.categoryName = "Category Name is required";
     }
-    if (newCategoryData.isActive === undefined || newCategoryData.isActive === null) {
+    if (
+      newCategoryData.isActive === undefined ||
+      newCategoryData.isActive === null
+    ) {
       newErrors.isActive = "Active/Inactive status is required";
     }
     setErrors(newErrors);
@@ -77,12 +82,15 @@ const Category = () => {
   // Handle Create or Update Category
   const handleSaveCategory = async () => {
     if (!validateForm()) {
-      return; 
+      return;
     }
 
     try {
       if (modalType === "create") {
-        await axios.post(`${process.env.REACT_APP_WEB_API}/Category`, newCategoryData);
+        await axios.post(
+          `${process.env.REACT_APP_WEB_API}/Category`,
+          newCategoryData
+        );
         alert("Category created successfully.");
       } else if (modalType === "edit") {
         await axios.put(
@@ -92,19 +100,30 @@ const Category = () => {
         alert("Category updated successfully.");
       }
 
-      fetchCategories(); 
+      fetchCategories();
       handleCloseModal();
     } catch (error) {
-      console.error(`Error ${modalType === "create" ? "creating" : "updating"} category:`, error);
-      alert(`Failed to ${modalType === "create" ? "create" : "update"} category.`);
+      console.error(
+        `Error ${modalType === "create" ? "creating" : "updating"} category:`,
+        error
+      );
+      alert(
+        `Failed to ${modalType === "create" ? "create" : "update"} category.`
+      );
     }
   };
 
   // Handle Delete
   const handleDeleteCategory = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_WEB_API}/Category/${selectedCategory.categoryId}`);
-      setCategories(categories.filter((category) => category.categoryId !== selectedCategory.categoryId));
+      await axios.delete(
+        `${process.env.REACT_APP_WEB_API}/Category/${selectedCategory.categoryId}`
+      );
+      setCategories(
+        categories.filter(
+          (category) => category.categoryId !== selectedCategory.categoryId
+        )
+      );
       handleCloseModal();
       alert("Category deleted successfully.");
     } catch (error) {
@@ -116,9 +135,15 @@ const Category = () => {
   return (
     <>
       <Header />
-      <div className="container my-4">
-        <h2>Category List</h2>
-        <Button variant="primary" className="mb-3 float-end" onClick={() => handleShowModal("create")}>
+      <div className="ml-10 mr-10 mb-10">
+        <div className="flex justify-center">
+          <h2>Category List</h2>
+        </div>
+        <Button
+          variant="primary"
+          className="mb-3 float-end"
+          onClick={() => handleShowModal("create")}
+        >
           <FontAwesomeIcon icon={faPlus} /> Create New Category
         </Button>
         <table className="table table-bordered table-striped">
@@ -126,7 +151,7 @@ const Category = () => {
             <tr>
               <th>#</th>
               <th>Category Name</th>
-              <th style={{ width: "50%" }}>Description</th>
+              <th style={{width: "50%"}}>Description</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -139,13 +164,13 @@ const Category = () => {
                   <td>{category.categoryName}</td>
                   <td>{category.categoryDescription || "No Description"}</td>
                   <td
-            style={{
-              color: category.isActive ? "green" : "red",
-              fontWeight: "bold",
-            }}
-          >
-            {category.isActive ? "Active" : "Inactive"}
-          </td>
+                    style={{
+                      color: category.isActive ? "green" : "red",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {category.isActive ? "Active" : "Inactive"}
+                  </td>
                   <td>
                     <button
                       className="mx-1 btn btn-warning btn-sm"
@@ -194,10 +219,15 @@ const Category = () => {
                   className="form-control"
                   value={newCategoryData.categoryName}
                   onChange={(e) =>
-                    setNewCategoryData({ ...newCategoryData, categoryName: e.target.value })
+                    setNewCategoryData({
+                      ...newCategoryData,
+                      categoryName: e.target.value,
+                    })
                   }
                 />
-                {errors.categoryName && <small className="text-danger">{errors.categoryName}</small>}
+                {errors.categoryName && (
+                  <small className="text-danger">{errors.categoryName}</small>
+                )}
               </div>
               <div className="form-group">
                 <label>Description (Optional)</label>
@@ -205,7 +235,10 @@ const Category = () => {
                   className="form-control"
                   value={newCategoryData.categoryDescription}
                   onChange={(e) =>
-                    setNewCategoryData({ ...newCategoryData, categoryDescription: e.target.value })
+                    setNewCategoryData({
+                      ...newCategoryData,
+                      categoryDescription: e.target.value,
+                    })
                   }
                 ></textarea>
               </div>
@@ -215,13 +248,18 @@ const Category = () => {
                   className="form-control"
                   value={newCategoryData.isActive}
                   onChange={(e) =>
-                    setNewCategoryData({ ...newCategoryData, isActive: e.target.value === "true" })
+                    setNewCategoryData({
+                      ...newCategoryData,
+                      isActive: e.target.value === "true",
+                    })
                   }
                 >
                   <option value={true}>Active</option>
                   <option value={false}>Inactive</option>
                 </select>
-                {errors.isActive && <small className="text-danger">{errors.isActive}</small>}
+                {errors.isActive && (
+                  <small className="text-danger">{errors.isActive}</small>
+                )}
               </div>
             </form>
           ) : modalType === "delete" ? (
