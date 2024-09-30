@@ -13,7 +13,7 @@ const ProtectedRoute = ({children, allowedRoles}) => {
 
   // If the user's role is not in the allowed roles, redirect them to login
   if (!allowedRoles.includes(role)) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/not-allowed" />;
   }
 
   // If the user is logged in and has the correct role, render the children (the route's component)

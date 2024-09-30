@@ -9,12 +9,14 @@ import Payment from "./pages/Payment/Payment";
 import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Products from "./pages/Product/products";
+import Users from "./pages/User/Users";
 import CreateProduct from "./pages/Product/createProduct";
 import Inventory from "./pages/Inventory/Inventory";
 import CretateInventory from "./pages/Inventory/CreateInventory";
 import Category from "./pages/Category/Category";
 import Login from "./pages/User/Login";
-import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute
+import ProtectedRoute from "./components/ProtectedRoute";
+import YouAreNotAllowed from "./pages/User/YouAreNotAllowed";
 
 export default function App() {
   return (
@@ -32,8 +34,17 @@ export default function App() {
           }
         />
         <Route path="/login" element={<Login />} />
+        <Route path="/not-allowed" element={<YouAreNotAllowed />} />
 
         {/* Admin routes */}
+        <Route
+          path="/Users"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS"]}>
+              <Users />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/order"
           element={

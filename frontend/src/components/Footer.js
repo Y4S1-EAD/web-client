@@ -77,7 +77,7 @@ export default function Footer() {
       </div>
 
       {/* <!-- Main container div: holds the entire content of the footer, including four sections (TW Elements, Products, Useful links, and Contact), with responsive styling and appropriate padding/margins. --> */}
-      <div className="mx-6 py-10 text-center md:text-left">
+      <div className="mx-6 py-10 text-left">
         <div className="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* <!-- TW Elements section --> */}
           <div className="">
@@ -202,7 +202,7 @@ export default function Footer() {
         <span>© 2024 Copyright:</span>
         <a
           className="font-semibold text-neutral-600 dark:text-neutral-400"
-          href="https://tw-elements.com/"
+          href="#"
         >
           Waves Enterprise
         </a>

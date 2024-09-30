@@ -5,12 +5,12 @@ import {Link} from "react-router-dom";
 import Logo from "../assets/logo.png";
 
 const navigation = [
-  {name: "Users", href: "users"},
-  {name: "Products", href: "/products"},
+  {name: "Users", href: "/users"},
   {name: "Orders", href: "/order"},
   {name: "Payments", href: "/payment"},
-  {name: "Inventory", href: "/inventory"},
+  {name: "Products", href: "/products"},
   {name: "Categories", href: "/categories"},
+  {name: "Inventory", href: "/inventory"},
 ];
 
 export default function Header() {
