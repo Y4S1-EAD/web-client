@@ -8,21 +8,14 @@ import Logo from "../../assets/logo.png";
 const Login = () => {
   const [inputUsername, setInputUsername] = useState("");
   const [inputPassword, setInputPassword] = useState("");
-  const [inputRole, setInputRole] = useState("Select Role"); // New state for role
 
   const [show, setShow] = useState(false);
+  const [errorMeg, setErrorMeg] = useState("Incorrect username or password.");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-
-    // Simple validation to ensure role is selected
-    if (inputRole === "Select Role") {
-      setShow(true);
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await axios.post(
@@ -30,7 +23,6 @@ const Login = () => {
         {
           username: inputUsername,
           password: inputPassword,
-          role: inputRole, // Send role to API
         }
       );
 
@@ -40,24 +32,31 @@ const Login = () => {
 
         // Store username and role in session storage
         sessionStorage.setItem("username", response.data.username);
-        sessionStorage.setItem("role", response.data.role);
         sessionStorage.setItem("userId", response.data.userId);
+        sessionStorage.setItem("role", response.data.role);
 
         // Redirect to the dashboard or another page
         window.location.href = "/";
       } else {
+        setErrorMeg(response.data.message);
         setShow(true);
       }
     } catch (error) {
+      // Corrected error handling for catch block
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setErrorMeg(error.response.data.message);
+      } else {
+        setErrorMeg("An unknown error occurred.");
+      }
       console.error("Login error:", error);
       setShow(true);
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleRoleChange = (role) => {
-    setInputRole(role); // Set selected role
   };
 
   const handlePassword = () => {
@@ -84,7 +83,7 @@ const Login = () => {
             onClose={() => setShow(false)}
             dismissible
           >
-            Incorrect username, password, or role.
+            {errorMeg}
           </Alert>
         )}
         <Form.Group className="mb-2" controlId="username">
@@ -107,43 +106,7 @@ const Login = () => {
             required
           />
         </Form.Group>
-        <Form.Group className="mb-2" controlId="userRole">
-          <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle"
-              type="button"
-              id="user-role"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {inputRole}
-            </button>
-            <div className="dropdown-menu" aria-labelledby="user-role">
-              <a
-                className="dropdown-item"
-                href="#"
-                onClick={() => handleRoleChange("Admin")}
-              >
-                I am Admin
-              </a>
-              <a
-                className="dropdown-item"
-                href="#"
-                onClick={() => handleRoleChange("CRM")}
-              >
-                I am CRM
-              </a>
-              <a
-                className="dropdown-item"
-                href="#"
-                onClick={() => handleRoleChange("Vendor")}
-              >
-                I am Vendor
-              </a>
-            </div>
-          </div>
-        </Form.Group>
+
         {!loading ? (
           <Button className="w-100" variant="primary" type="submit">
             Log In
@@ -153,7 +116,7 @@ const Login = () => {
             Logging In...
           </Button>
         )}
-        <div className="d-grid justify-content-end">
+        {/* <div className="d-grid justify-content-end">
           <Button
             className="text-muted px-0"
             variant="link"
@@ -161,7 +124,7 @@ const Login = () => {
           >
             Forgot password?
           </Button>
-        </div>
+        </div> */}
       </Form>
       <div className="w-100 mb-2 position-absolute bottom-0 start-50 translate-middle-x text-white text-center">
         Made by SLIIT-SSD | &copy;2024

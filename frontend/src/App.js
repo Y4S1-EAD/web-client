@@ -14,11 +14,13 @@ import Inventory from "./pages/Inventory/Inventory";
 import CretateInventory from "./pages/Inventory/CreateInventory";
 import Category from "./pages/Category/Category";
 import Login from "./pages/User/Login";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute
 
 export default function App() {
   return (
     <Router>
       <Routes>
+        {/* Public routes */}
         <Route
           path="/"
           element={
@@ -29,15 +31,65 @@ export default function App() {
             </>
           }
         />
-        <Route path="/order" element={<Order />} />
-        {/* product routes */}
-        <Route path="/products" element={<Products />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create-product" element={<CreateProduct />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/create-inventory" element={<CretateInventory />} />
-        <Route path="/categories" element={<Category />} />
+
+        {/* Admin routes */}
+        <Route
+          path="/order"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS", "Vendor"]}>
+              <Order />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS", "Vendor"]}>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-product"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS", "Vendor"]}>
+              <CreateProduct />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/payment"
+          element={
+            <ProtectedRoute allowedRoles={["Admin"]}>
+              <Payment />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/inventory"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS"]}>
+              <Inventory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-inventory"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS"]}>
+              <CretateInventory />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "CRS"]}>
+              <Category />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
