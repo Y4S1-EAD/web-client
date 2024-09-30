@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 import Logo from "../assets/logo.png";
 
 const navigation = [
-  {name: "Users", href: "#"},
+  {name: "Users", href: "users"},
   {name: "Products", href: "/products"},
   {name: "Orders", href: "/order"},
   {name: "Payments", href: "/payment"},
