@@ -39,8 +39,9 @@ const Login = () => {
         console.log(`Login successful for user: ${response.data.username}`);
 
         // Store username and role in session storage
-        sessionStorage.setItem("username", inputUsername);
-        sessionStorage.setItem("role", inputRole);
+        sessionStorage.setItem("username", response.data.username);
+        sessionStorage.setItem("role", response.data.role);
+        sessionStorage.setItem("userId", response.data.userId);
 
         // Redirect to the dashboard or another page
         window.location.href = "/";
