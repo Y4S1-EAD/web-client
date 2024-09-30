@@ -44,7 +44,7 @@ export default function EditUser({user, onUserUpdated}) {
       email,
       address,
       role,
-      password: password || user.password, // Use old password if not changed
+      password,
       ratings,
       status: parseInt(status),
     };
@@ -219,9 +219,10 @@ export default function EditUser({user, onUserUpdated}) {
                           type="password"
                           id="password"
                           className="form-control"
-                          placeholder="Enter new password (or leave blank)"
+                          placeholder="Enter new password again for veriification"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
+                          required
                         />
                       </div>
 
