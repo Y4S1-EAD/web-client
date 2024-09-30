@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"; 
-import dt from "datatables.net-bs4"; 
-import { Modal, Button } from "react-bootstrap"; 
+import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+import dt from "datatables.net-bs4";
+import {Modal, Button} from "react-bootstrap";
 import axios from "axios";
 import Header from "../../components/Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faTrash,
   faEye,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Footer from "../../components/Footer";
 
 const Inventory = () => {
@@ -68,7 +68,7 @@ const Inventory = () => {
 
   useEffect(() => {
     fetchProducts();
-    fetchAllCategories(); 
+    fetchAllCategories();
 
     return () => {
       if ($.fn.DataTable.isDataTable("#productsTable")) {
@@ -165,10 +165,15 @@ const Inventory = () => {
   return (
     <>
       <Header />
-      <div className="container">
-        <h1 className="my-4">Inventory</h1>
-        <Link to="/create-inventory">
-          <button className="my-3 btn btn-primary float-end">
+      <div className="ml-10 mr-10 mb-10">
+        <div className="flex justify-center">
+          <h2>Inventory</h2>
+        </div>
+        <Link
+          to="/create-inventory"
+          className="d-flex justify-content-end mb-3"
+        >
+          <button className="btn btn-primary">
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
             Add Item
           </button>
@@ -177,14 +182,14 @@ const Inventory = () => {
         <table
           id="productsTable"
           className="table table-striped table-bordered"
-          style={{ width: "100%" }}
+          style={{width: "100%"}}
         >
           <thead>
             <tr>
               <th>#</th>
               <th>Product Name</th>
               <th>Image</th>
-              <th style={{ width: "20%" }}>Description</th>
+              <th style={{width: "20%"}}>Description</th>
               <th>Price</th>
               <th>Stock</th>
               <th>Category</th>
@@ -201,7 +206,7 @@ const Inventory = () => {
                     <img
                       src={product.image}
                       alt={product.productName}
-                      style={{ width: "50px" }}
+                      style={{width: "50px"}}
                     />
                   </td>
                   <td>
