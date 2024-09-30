@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import $ from "jquery";
 
 //  boostrap datatable
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css"; // For Bootstrap styling
 import dt from "datatables.net-bs4"; // DataTables Bootstrap integration
-import { Modal, Button } from "react-bootstrap"; // For Bootstrap modals
+import {Modal, Button} from "react-bootstrap"; // For Bootstrap modals
 import axios from "axios";
 import Header from "../../components/Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
   faEdit,
   faTrash,
   faEye,
   faPlus,
 } from "@fortawesome/free-solid-svg-icons"; // Import FontAwesome icons
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Footer from "../../components/Footer";
 
 const Products = () => {
@@ -163,10 +163,12 @@ const Products = () => {
   return (
     <>
       <Header />
-      <div className="container">
-        <h1 className="my-4">Products List</h1>
-        <Link to="/create-product">
-          <button className="my-3 btn btn-primary float-end">
+      <div className="ml-10 mr-10 mb-10">
+        <div className="flex justify-center">
+          <h2>Products List</h2>
+        </div>
+        <Link to="/create-product" className="d-flex justify-content-end mb-3">
+          <button className="btn btn-primary">
             <FontAwesomeIcon className="mr-2" icon={faPlus} />
             Add Product
           </button>
@@ -175,14 +177,14 @@ const Products = () => {
         <table
           id="productsTable"
           className="table table-striped table-bordered"
-          style={{ width: "100%" }}
+          style={{width: "100%"}}
         >
           <thead>
             <tr>
               <th>#</th>
               <th>Name</th>
               <th>Image</th>
-              <th style={{ width: "20%" }}>Description</th>
+              <th style={{width: "20%"}}>Description</th>
               <th>Price</th>
               <th>Stock</th>
               <th>Category</th>
@@ -199,7 +201,7 @@ const Products = () => {
                     <img
                       src={product.image}
                       alt={product.productName}
-                      style={{ width: "50px" }}
+                      style={{width: "50px"}}
                     />
                   </td>
                   <td>
