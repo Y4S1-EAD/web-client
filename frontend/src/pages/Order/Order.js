@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import CreateOrder from "./CreateOrder";
 import EditOrder from "./EditOrder";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import $ from "jquery";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Order() {
@@ -83,15 +83,18 @@ export default function Order() {
     <>
       <Header />
       <ToastContainer />
-      <div className="container my-4">
-        <h2 className="mt-10">Order List</h2>
+      <div className="ml-10 mr-10 mb-10">
+        <div className="flex justify-center">
+          <h2>Order List</h2>
+        </div>
+
         <div className="d-flex justify-content-end mb-3">
           <CreateOrder onOrderCreated={handleOrderCreated} />
         </div>
         <table
           id="orderTable"
           className="table table-striped table-bordered"
-          style={{ width: "100%" }}
+          style={{width: "100%"}}
         >
           <thead>
             <tr>
