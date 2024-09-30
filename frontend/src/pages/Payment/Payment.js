@@ -80,8 +80,10 @@ export default function Payment() {
     <>
       <Header />
       <ToastContainer />
-      <div className="container my-4">
-        <h2 className="mt-10">Payment List</h2>
+      <div className="ml-10 mr-10 mb-10">
+        <div className="flex justify-center">
+          <h2>Product List</h2>
+        </div>
 
         <div className="d-flex justify-content-end mb-3">
           <CreatePayment onPaymentCreated={handlePaymentCreated} />
@@ -131,15 +133,6 @@ export default function Payment() {
               </tr>
             )}
           </tbody>
-          <tfoot>
-            <tr>
-              <th>Payment ID</th>
-              <th>Payment Reference</th>
-              <th>Amount</th>
-              <th>User ID</th>
-              <th>Actions</th>
-            </tr>
-          </tfoot>
         </table>
       </div>
       <Footer />
