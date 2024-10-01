@@ -82,7 +82,7 @@ export default function Payment() {
       <ToastContainer />
       <div className="ml-10 mr-10 mb-10">
         <div className="flex justify-center">
-          <h2>Product List</h2>
+          <h2>Payment List</h2>
         </div>
 
         <div className="d-flex justify-content-end mb-3">
