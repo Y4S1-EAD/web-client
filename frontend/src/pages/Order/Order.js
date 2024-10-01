@@ -12,10 +12,12 @@ import dt from "datatables.net-bs4";
 import axios from "axios";
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axios
@@ -28,7 +30,7 @@ export default function Order() {
         console.error("Error fetching orders:", error);
         toast.error("Error fetching orders.");
       });
-
+    setLoading(false);
     return () => {
       if ($.fn.DataTable.isDataTable("#orderTable")) {
         $("#orderTable").DataTable().destroy(true);
@@ -146,6 +148,15 @@ export default function Order() {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center">
+          <ClipLoader
+            color="#000"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       </div>
       <Footer />
     </>

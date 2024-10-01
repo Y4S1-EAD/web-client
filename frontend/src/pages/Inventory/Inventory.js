@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {Link} from "react-router-dom";
 import Footer from "../../components/Footer";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Inventory = () => {
   const [orders, setOrders] = useState([]);
@@ -25,6 +26,7 @@ const Inventory = () => {
   const [modalType, setModalType] = useState("");
   const [imageBase64, setImageBase64] = useState("");
   const [allCategories, setAllCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Fetch all products
   const fetchProducts = async () => {
@@ -50,6 +52,7 @@ const Inventory = () => {
 
       setCategories(categoriesData);
       setProducts(productsData);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -248,6 +251,15 @@ const Inventory = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center">
+          <ClipLoader
+            color="#000"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       </div>
 
       {/* Modal */}

@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { ProgressBar } from "react-bootstrap";
+import {ProgressBar} from "react-bootstrap";
 import "../../styles/Profile.css";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [ratingsSummary, setRatingsSummary] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [isVendor, setIsVendor] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const userId = sessionStorage.getItem("userId");
   const userRole = sessionStorage.getItem("role");
@@ -30,6 +32,7 @@ const Profile = () => {
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
+      setLoading(false);
     };
 
     const fetchVendorRatingSummary = async (vendorId) => {
@@ -53,7 +56,7 @@ const Profile = () => {
             const userResponse = await axios.get(
               `${process.env.REACT_APP_WEB_API}/Users/${review.userId}`
             );
-            return { ...review, username: userResponse.data.username };
+            return {...review, username: userResponse.data.username};
           })
         );
         setReviews(reviewsWithUsernames);
@@ -160,6 +163,15 @@ const Profile = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <ClipLoader
+          color="#000"
+          loading={loading}
+          size={150}
+          aria-label="Loading Spinner"
+          data-testid="loader"
+        />
       </div>
       <Footer />
     </>

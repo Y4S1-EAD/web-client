@@ -11,10 +11,12 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.min.css";
 import dt from "datatables.net-bs4";
 import axios from "axios";
 import {ToastContainer, toast} from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 
 export default function Payment() {
   const [payments, setPayments] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPayments();
@@ -42,6 +44,7 @@ export default function Payment() {
       .catch((error) => {
         console.error("There was an error fetching the payments!", error);
       });
+    setLoading(false);
   };
 
   // Function to handle delete
@@ -134,6 +137,15 @@ export default function Payment() {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center">
+          <ClipLoader
+            color="#000"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       </div>
       <Footer />
     </>

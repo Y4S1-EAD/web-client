@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import {toast} from "react-toastify";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -19,6 +20,7 @@ const Category = () => {
     isActive: true,
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(true);
 
   // Fetch all categories
   const fetchCategories = async () => {
@@ -31,6 +33,7 @@ const Category = () => {
       console.error("Error fetching categories:", error);
       alert("Failed to fetch categories.");
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -196,6 +199,15 @@ const Category = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center">
+          <ClipLoader
+            color="#000"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       </div>
 
       {/* Modal for create, edit, and delete */}

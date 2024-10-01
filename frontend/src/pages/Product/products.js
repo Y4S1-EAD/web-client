@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import $ from "jquery";
+import ClipLoader from "react-spinners/ClipLoader";
 
 //  boostrap datatable
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,6 +27,7 @@ const Products = () => {
   const [modalType, setModalType] = useState("");
   const [imageBase64, setImageBase64] = useState("");
   const [allCategories, setAllCategories] = useState([]); // Store all categories for the dropdown
+  const [loading, setLoading] = useState(true);
 
   // Fetch all products
   const fetchProducts = async () => {
@@ -51,6 +53,7 @@ const Products = () => {
 
       setCategories(categoriesData);
       setProducts(productsData);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -243,6 +246,15 @@ const Products = () => {
             )}
           </tbody>
         </table>
+        <div className="flex justify-center">
+          <ClipLoader
+            color="#000"
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
       </div>
 
       {/* Modal */}
