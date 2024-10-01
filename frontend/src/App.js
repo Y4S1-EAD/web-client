@@ -3,10 +3,10 @@ import React from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
-import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Order from "./pages/Order/Order";
 import Payment from "./pages/Payment/Payment";
-import {ToastContainer} from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Products from "./pages/Product/products";
 import Users from "./pages/User/Users";
@@ -17,6 +17,7 @@ import Category from "./pages/Category/Category";
 import Login from "./pages/User/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import YouAreNotAllowed from "./pages/User/YouAreNotAllowed";
+import Profile from "./pages/Profile/Profile";
 
 export default function App() {
   return (
@@ -98,6 +99,14 @@ export default function App() {
           element={
             <ProtectedRoute allowedRoles={["Admin", "CRS"]}>
               <Category />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute allowedRoles={["Admin", "Vendor", "CRS"]}>
+              <Profile />
             </ProtectedRoute>
           }
         />
