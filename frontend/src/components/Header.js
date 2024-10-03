@@ -3,6 +3,7 @@ import {Dialog, DialogPanel} from "@headlessui/react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Link} from "react-router-dom";
 import Logo from "../assets/logo.png";
+import NotificationPanel from "./NotificationPanel";
 
 const navigation = [
   {name: "Users", href: "/users"},
@@ -69,7 +70,7 @@ export default function Header() {
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <div className="pr-3">
-            <ion-icon name="notifications-outline" size="large"></ion-icon>
+            <NotificationPanel />
           </div>
           {isLoggedIn ? (
             <button
