@@ -68,6 +68,9 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div className="pr-3">
+            <ion-icon name="notifications-outline" size="large"></ion-icon>
+          </div>
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
@@ -118,6 +121,9 @@ export default function Header() {
                     {item.name}
                   </a>
                 ))}
+              </div>
+              <div className="py-6">
+                <ion-icon name="notifications-outline"></ion-icon>
               </div>
               <div className="py-6">
                 {isLoggedIn ? (
