@@ -3,6 +3,7 @@ import {Dialog, DialogPanel} from "@headlessui/react";
 import {Bars3Icon, XMarkIcon} from "@heroicons/react/24/outline";
 import {Link} from "react-router-dom";
 import Logo from "../assets/logo.png";
+import NotificationPanel from "./NotificationPanel";
 
 const navigation = [
   {name: "Users", href: "/users"},
@@ -68,6 +69,9 @@ export default function Header() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div className="pr-3">
+            <NotificationPanel />
+          </div>
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
@@ -118,6 +122,9 @@ export default function Header() {
                     {item.name}
                   </a>
                 ))}
+              </div>
+              <div className="py-6">
+                <ion-icon name="notifications-outline"></ion-icon>
               </div>
               <div className="py-6">
                 {isLoggedIn ? (
