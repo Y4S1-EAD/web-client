@@ -18,6 +18,7 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
+  const userRole = sessionStorage.getItem("role"); // Retrieve the logged-in user's role
 
   useEffect(() => {
     axios
@@ -130,13 +131,21 @@ export default function Users() {
                       : "Pending"}
                   </td>
                   <td>
-                    <EditUser user={user} onUserUpdated={handleUserUpdated} />
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => deleteUser(user.userId)}
-                    >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
+                    {/* Conditionally hide Edit/Delete for CRS role viewing Admin */}
+                    {!(userRole === "CRS" && user.role === "Admin") && (
+                      <>
+                        <EditUser
+                          user={user}
+                          onUserUpdated={handleUserUpdated}
+                        />
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => deleteUser(user.userId)}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                        </button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))

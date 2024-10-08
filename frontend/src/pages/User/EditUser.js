@@ -37,25 +37,53 @@ export default function EditUser({user, onUserUpdated}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const updatedUserData = {
-      userId: user.userId,
-      username,
-      phoneNumber: parseInt(phoneNumber),
-      email,
-      address,
-      role,
-      password,
-      ratings,
-      status: parseInt(status),
-    };
+    // Prepare a JSON Patch array to hold the operations
+    const patchData = [];
 
+    // Check and push only changed fields to the patchData
+    if (username !== user.username) {
+      patchData.push({op: "replace", path: "/Username", value: username});
+    }
+
+    if (phoneNumber !== user.phoneNumber) {
+      patchData.push({
+        op: "replace",
+        path: "/PhoneNumber",
+        value: parseInt(phoneNumber),
+      });
+    }
+
+    if (email !== user.email) {
+      patchData.push({op: "replace", path: "/Email", value: email});
+    }
+
+    if (address !== user.address) {
+      patchData.push({op: "replace", path: "/Address", value: address});
+    }
+
+    if (role !== user.role) {
+      patchData.push({op: "replace", path: "/Role", value: role});
+    }
+
+    // Password should be updated only if provided (and not pre-filled for security reasons)
+    if (password) {
+      patchData.push({op: "replace", path: "/Password", value: password});
+    }
+
+    if (ratings !== user.ratings) {
+      patchData.push({op: "replace", path: "/Ratings", value: ratings});
+    }
+
+    if (status !== user.status) {
+      patchData.push({op: "replace", path: "/Status", value: parseInt(status)});
+    }
+
+    // Clear any previous errors
     setErrors([]);
 
+    // Make the PATCH request using axios
     axios
-      .put(
-        `${process.env.REACT_APP_WEB_API}/Users/${user.userId}`,
-        updatedUserData
-      )
+      .patch(`${process.env.REACT_APP_WEB_API}/Users/${user.userId}`, patchData)
       .then((response) => {
         console.log("User updated successfully:", response.data);
         toast.success("User updated successfully!");
@@ -222,7 +250,6 @@ export default function EditUser({user, onUserUpdated}) {
                           placeholder="Enter new password again for veriification"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          required
                         />
                       </div>
 
