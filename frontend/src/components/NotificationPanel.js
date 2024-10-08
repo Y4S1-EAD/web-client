@@ -40,7 +40,7 @@ const NotificationPanel = () => {
         );
       });
 
-      setNotifications(filteredNotifications);
+      setNotifications(filteredNotifications.reverse());
     } catch (error) {
       console.error("Error fetching notifications:", error);
     } finally {
