@@ -1,4 +1,3 @@
-/* NotificationPanel.css */
 .notification-panel {
   position: absolute;
   top: 100px;
@@ -9,6 +8,8 @@
   border-radius: 8px;
   padding: 10px;
   z-index: 1000;
+  max-height: 400px; /* Set a maximum height */
+  overflow-y: auto;  /* Enable vertical scroll */
 }
 
 .notification-panel h3 {
@@ -37,4 +38,22 @@
 
 .notification-panel li small {
   color: #999;
+}
+
+/* Add custom scrollbar styles (optional) */
+.notification-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notification-panel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.notification-panel::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 8px;
+}
+
+.notification-panel::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
